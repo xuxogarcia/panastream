@@ -1,0 +1,58 @@
+# Multi-stage build for production
+FROM node:18-alpine as base
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY server/package*.json ./server/
+COPY client/package*.json ./client/
+
+# Install dependencies
+RUN npm ci --only=production
+RUN cd server && npm ci --only=production
+RUN cd client && npm install
+
+# Copy source code
+COPY server/ ./server/
+COPY client/ ./client/
+
+# Build client
+RUN cd client && npm run build
+
+# Production stage
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application
+COPY --from=base /app/server ./server
+COPY --from=base /app/client/build ./client/build
+COPY --from=base /app/node_modules ./node_modules
+
+# Install serve for static files and curl for health checks
+RUN npm install -g serve && apk add --no-cache curl
+
+# Copy startup script
+COPY start-app.sh ./
+RUN chmod +x start-app.sh
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+
+# Change ownership
+RUN chown -R nodejs:nodejs /app
+USER nodejs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
+# Start both services using the startup script
+CMD ["./start-app.sh"]

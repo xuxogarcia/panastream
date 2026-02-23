@@ -1,0 +1,71 @@
+name: panastream
+services:
+- name: api
+  source_dir: /server
+  github:
+    repo: your-username/panastream
+    branch: main
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3001
+  health_check:
+    http_path: /health
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "3001"
+  - key: AWS_ACCESS_KEY_ID
+    value: ${AWS_ACCESS_KEY_ID}
+  - key: AWS_SECRET_ACCESS_KEY
+    value: ${AWS_SECRET_ACCESS_KEY}
+  - key: AWS_REGION
+    value: ${AWS_REGION}
+  - key: S3_BUCKET_NAME
+    value: panastream-pixaclara
+  - key: CLOUDFRONT_DOMAIN
+    value: vod.panastream.pixaclara.io
+  - key: MEDIACONVERT_ROLE_ARN
+    value: arn:aws:iam::541759744703:role/los2marias-vod-MediaConvert
+  - key: MEDIACONVERT_ENDPOINT
+    value: ${MEDIACONVERT_ENDPOINT}
+  - key: FRONTEND_URL
+    value: ${FRONTEND_URL}
+  - key: APP_URL
+    value: ${APP_URL}
+
+- name: frontend
+  source_dir: /client
+  github:
+    repo: your-username/panastream
+    branch: main
+  run_command: npm run build && npx serve -s build -l 3000
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  health_check:
+    http_path: /
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: REACT_APP_API_URL
+    value: ${REACT_APP_API_URL}
+  - key: PORT
+    value: "3000"
+
+static_sites:
+- name: frontend-static
+  source_dir: /client
+  github:
+    repo: your-username/panastream
+    branch: main
+  build_command: npm run build
+  output_dir: build
+  routes:
+  - path: /
+  envs:
+  - key: REACT_APP_API_URL
+    value: ${REACT_APP_API_URL}

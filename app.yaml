@@ -1,0 +1,113 @@
+# DigitalOcean App Platform Configuration for PanaStream Server
+# Server-only deployment for panastream.fabricatedcrime.com
+
+name: panastream
+region: sfo3
+
+services:
+  - name: api
+    github:
+      repo: your-org/pana-stream  # Update with your GitHub repo
+      branch: main
+      deploy_on_push: true
+    
+    # Build and run configuration - server directory only
+    source_dir: /server
+    build_command: npm install
+    run_command: npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs  # Adjust based on needs
+    
+    # Domain configuration
+    routes:
+      - path: /
+    
+    # HTTP port
+    http_port: 3001
+    
+    # Health check
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    
+    # Environment variables
+    envs:
+      # API Security (REQUIRED)
+      - key: PANASTREAM_API_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+        value: ""  # Set this in App Platform dashboard
+        
+      # Server Configuration
+      - key: NODE_ENV
+        scope: RUN_TIME
+        value: production
+      - key: PORT
+        scope: RUN_TIME
+        value: "3001"
+      
+      # AWS Configuration (REQUIRED)
+      - key: AWS_ACCESS_KEY_ID
+        scope: RUN_TIME
+        type: SECRET
+        value: ""  # Set in dashboard
+      - key: AWS_SECRET_ACCESS_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ""  # Set in dashboard
+      - key: AWS_REGION
+        scope: RUN_TIME
+        value: "us-east-1"
+      
+      # S3 Configuration (REQUIRED)
+      - key: S3_BUCKET_NAME
+        scope: RUN_TIME
+        type: SECRET
+        value: ""  # Set in dashboard
+      - key: S3_UPLOAD_FOLDER
+        scope: RUN_TIME
+        value: "uploads"
+      - key: S3_PROCESSED_FOLDER
+        scope: RUN_TIME
+        value: "processed"
+      
+      # CloudFront Configuration (REQUIRED)
+      - key: CLOUDFRONT_DOMAIN
+        scope: RUN_TIME
+        value: "vod.panastream.pixaclara.io"  # Update with your CloudFront domain
+      
+      # MediaConvert Configuration (REQUIRED)
+      - key: MEDIACONVERT_ENDPOINT
+        scope: RUN_TIME
+        value: "https://mediaconvert.us-east-1.amazonaws.com"
+      - key: MEDIACONVERT_ROLE_ARN
+        scope: RUN_TIME
+        type: SECRET
+        value: ""  # Set in dashboard
+      
+      # Database
+      - key: DATABASE_PATH
+        scope: RUN_TIME
+        value: "./database.sqlite"
+      
+      # CORS - Allow Fabricated Crime domain
+      - key: FRONTEND_URL
+        scope: RUN_TIME
+        value: "https://fabricatedcrime.com"
+      - key: APP_URL
+        scope: RUN_TIME
+        value: "https://panastream.fabricatedcrime.com"
+
+# Domain configuration
+domains:
+  - domain: panastream.fabricatedcrime.com
+    type: PRIMARY
+
+# Note: For production, consider using a managed database instead of SQLite
+# You would need to update the database connection in config/database.js
+

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=panastream-pixaclara
+      - CLOUDFRONT_DOMAIN=vod.panastream.pixaclara.io
+      - MEDIACONVERT_ROLE_ARN=arn:aws:iam::541759744703:role/los2marias-vod-MediaConvert
+      - MEDIACONVERT_ENDPOINT=${MEDIACONVERT_ENDPOINT}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - APP_URL=${APP_URL}
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

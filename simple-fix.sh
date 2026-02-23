@@ -1,0 +1,86 @@
+#!/bin/bash
+
+echo "🔧 Simple Fix for API Routing"
+echo "============================="
+echo ""
+
+echo "📋 The issue: API calls return HTML instead of JSON"
+echo "   This happens because the frontend serves all requests"
+echo ""
+
+echo "🔧 Solution: Use serve with proxy configuration"
+echo ""
+
+# Create a simple app spec that uses serve with proxy
+cat > .do/app-simple-proxy.yaml << 'EOF'
+name: panastream
+services:
+- name: app
+  source_dir: /
+  github:
+    repo: pixaclara/panastream
+    branch: main
+  build_command: |
+    cd server && npm install --production
+    cd ../client && npm install && npm run build
+  run_command: |
+    cd server && PORT=3001 npm start &
+    sleep 5
+    cd client && npx serve -s build -l 3000 --single --proxy /api http://localhost:3001 &
+    wait
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 3000
+  health_check:
+    http_path: /
+    initial_delay_seconds: 30
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "3001"
+  - key: AWS_ACCESS_KEY_ID
+    value: ${AWS_ACCESS_KEY_ID}
+  - key: AWS_SECRET_ACCESS_KEY
+    value: ${AWS_SECRET_ACCESS_KEY}
+  - key: AWS_REGION
+    value: ${AWS_REGION}
+  - key: S3_BUCKET_NAME
+    value: panastream-pixaclara
+  - key: CLOUDFRONT_DOMAIN
+    value: vod.panastream.pixaclara.io
+  - key: MEDIACONVERT_ROLE_ARN
+    value: arn:aws:iam::541759744703:role/los2marias-vod-MediaConvert
+  - key: FRONTEND_URL
+    value: ${FRONTEND_URL}
+  - key: APP_URL
+    value: ${APP_URL}
+  - key: REACT_APP_API_URL
+    value: ${REACT_APP_API_URL}
+EOF
+
+echo "✅ Created app spec with serve proxy"
+echo ""
+
+echo "🚀 Deploying with serve proxy..."
+doctl apps update 5d24a202-20de-4450-8c87-3d3d1e6c5ec1 --spec .do/app-simple-proxy.yaml --wait
+
+echo ""
+echo "✅ App updated with serve proxy!"
+echo ""
+echo "🔍 How it works:"
+echo "   - Backend runs on port 3001 (internal)"
+echo "   - Frontend runs on port 3000 with proxy"
+echo "   - serve --proxy /api http://localhost:3001 routes API calls to backend"
+echo ""
+echo "📝 Test the app: https://panastream-3xj8d.ondigitalocean.app"
+echo "   The JSON error should now be fixed!"
+echo ""
+
+# Clean up
+rm .do/app-simple-proxy.yaml
+echo "🧹 Cleaned up temporary files"

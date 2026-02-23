@@ -1,0 +1,50 @@
+# Simple production Dockerfile
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache curl
+
+# Copy package files
+COPY package*.json ./
+COPY server/package*.json ./server/
+COPY client/package*.json ./client/
+
+# Install dependencies (use npm install instead of npm ci to avoid lock file issues)
+RUN npm install --only=production
+RUN cd server && npm install --only=production
+RUN cd client && npm install
+
+# Copy source code
+COPY server/ ./server/
+COPY client/ ./client/
+
+# Build client
+RUN cd client && npm run build
+
+# Install serve globally
+RUN npm install -g serve
+
+# Copy startup script
+COPY start-app.sh ./
+RUN chmod +x start-app.sh
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+
+# Change ownership
+RUN chown -R nodejs:nodejs /app
+USER nodejs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
+# Start both services using the startup script
+CMD ["./start-app.sh"]
