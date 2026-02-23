@@ -4,7 +4,7 @@
 
 ### 1. Health Check (No Auth Required)
 ```bash
-curl https://panastream.fabricatedcrime.io/health
+curl https://your-app-name.ondigitalocean.app/health
 ```
 
 **Expected Response:**
@@ -14,7 +14,7 @@ curl https://panastream.fabricatedcrime.io/health
 
 ### 2. Test API Without Token (Should Fail)
 ```bash
-curl https://panastream.fabricatedcrime.io/api/media
+curl https://your-app-name.ondigitalocean.app/api/media
 ```
 
 **Expected Response:**
@@ -30,13 +30,13 @@ curl https://panastream.fabricatedcrime.io/api/media
 ```bash
 # Replace YOUR_TOKEN with your actual token
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     https://panastream.fabricatedcrime.io/api/media
+     https://your-app-name.ondigitalocean.app/api/media
 ```
 
 **Or using X-API-Key header:**
 ```bash
 curl -H "X-API-Key: YOUR_TOKEN" \
-     https://panastream.fabricatedcrime.io/api/media
+     https://your-app-name.ondigitalocean.app/api/media
 ```
 
 **Expected Response:**
@@ -55,19 +55,19 @@ curl -H "X-API-Key: YOUR_TOKEN" \
 **Filmmakers:**
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     https://panastream.fabricatedcrime.io/api/filmmakers
+     https://your-app-name.ondigitalocean.app/api/filmmakers
 ```
 
 **Microsites:**
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     https://panastream.fabricatedcrime.io/api/microsites
+     https://your-app-name.ondigitalocean.app/api/microsites
 ```
 
 **Library:**
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
-     https://panastream.fabricatedcrime.io/api/library
+     https://your-app-name.ondigitalocean.app/api/library
 ```
 
 ## Using the Test Script
@@ -86,14 +86,14 @@ A test script is provided for comprehensive testing:
 
 ### Test 1: Without Token (Should Fail)
 ```bash
-curl -v https://panastream.fabricatedcrime.io/api/media 2>&1 | grep -E "(HTTP|401|Unauthorized)"
+curl -v https://your-app-name.ondigitalocean.app/api/media 2>&1 | grep -E "(HTTP|401|Unauthorized)"
 ```
 
 ### Test 2: With Token (Should Succeed)
 ```bash
 TOKEN="your-token-here"
 curl -v -H "Authorization: Bearer $TOKEN" \
-     https://panastream.fabricatedcrime.io/api/media 2>&1 | grep -E "(HTTP|200|media)"
+     https://your-app-name.ondigitalocean.app/api/media 2>&1 | grep -E "(HTTP|200|media)"
 ```
 
 ## Common Issues
@@ -105,7 +105,7 @@ curl -v -H "Authorization: Bearer $TOKEN" \
 
 ### 404 Not Found
 - **Cause:** Wrong endpoint or domain
-- **Fix:** Verify domain is `panastream.fabricatedcrime.io` and endpoint path is correct
+- **Fix:** Verify domain is `your-app-name.ondigitalocean.app` and endpoint path is correct
 
 ### Connection Refused
 - **Cause:** Service not running or DNS not propagated
@@ -121,7 +121,7 @@ Once PanaStream is deployed, update Fabricated Crime:
 
 ```bash
 # In Fabricated Crime environment variables
-PANASTREAM_API_URL=https://panastream.fabricatedcrime.io/api
+PANASTREAM_API_URL=https://your-app-name.ondigitalocean.app/api
 PANASTREAM_API_TOKEN=your-token-here
 ```
 

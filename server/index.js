@@ -30,7 +30,7 @@ if (process.env.APP_URL) {
   allowedOrigins.push(process.env.APP_URL);
 }
 // Always allow Fabricated Crime domain
-allowedOrigins.push('https://fabricatedcrime.com', 'http://fabricatedcrime.com');
+allowedOrigins.push('https://your-domain.com', 'http://your-domain.com');
 // Allow localhost for local testing (even in production)
 if (process.env.ALLOW_LOCALHOST !== 'false') {
   allowedOrigins.push('http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001');

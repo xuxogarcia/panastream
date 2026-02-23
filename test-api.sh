@@ -2,7 +2,7 @@
 # Test PanaStream API endpoints
 # Usage: ./test-api.sh [your-api-token]
 
-API_URL="https://panastream.fabricatedcrime.io"
+API_URL="${PANASTREAM_API_URL:-https://your-app-name.ondigitalocean.app}"
 TOKEN="${1:-}"
 
 echo "🧪 Testing PanaStream API"

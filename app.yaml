@@ -1,5 +1,5 @@
 # DigitalOcean App Platform Configuration for PanaStream Server
-# Server-only deployment for panastream.fabricatedcrime.com
+# Server-only deployment for your-app-name.ondigitalocean.app (or your custom domain)
 
 name: panastream
 region: sfo3
@@ -79,7 +79,7 @@ services:
       # CloudFront Configuration (REQUIRED)
       - key: CLOUDFRONT_DOMAIN
         scope: RUN_TIME
-        value: "vod.panastream.pixaclara.io"  # Update with your CloudFront domain
+        value: "your-cloudfront-domain.cloudfront.net"  # Update with your CloudFront domain
       
       # MediaConvert Configuration (REQUIRED)
       - key: MEDIACONVERT_ENDPOINT
@@ -98,14 +98,14 @@ services:
       # CORS - Allow Fabricated Crime domain
       - key: FRONTEND_URL
         scope: RUN_TIME
-        value: "https://fabricatedcrime.com"
+        value: "https://your-domain.com"
       - key: APP_URL
         scope: RUN_TIME
-        value: "https://panastream.fabricatedcrime.com"
+        value: "https://your-app-name.ondigitalocean.app"
 
 # Domain configuration
 domains:
-  - domain: panastream.fabricatedcrime.com
+  - domain: your-app-name.ondigitalocean.app
     type: PRIMARY
 
 # Note: For production, consider using a managed database instead of SQLite

@@ -14,8 +14,8 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=${AWS_REGION}
       - S3_BUCKET_NAME=panastream-pixaclara
-      - CLOUDFRONT_DOMAIN=vod.panastream.pixaclara.io
-      - MEDIACONVERT_ROLE_ARN=arn:aws:iam::541759744703:role/los2marias-vod-MediaConvert
+      - CLOUDFRONT_DOMAIN=your-cloudfront-domain.cloudfront.net
+      - MEDIACONVERT_ROLE_ARN=arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_MEDIACONVERT_ROLE
       - MEDIACONVERT_ENDPOINT=${MEDIACONVERT_ENDPOINT}
       - FRONTEND_URL=${FRONTEND_URL}
       - APP_URL=${APP_URL}

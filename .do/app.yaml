@@ -78,7 +78,7 @@ services:
       # CloudFront Configuration (REQUIRED)
       - key: CLOUDFRONT_DOMAIN
         scope: RUN_TIME
-        value: "vod.panastream.pixaclara.io"  # Update with your domain
+        value: "your-cloudfront-domain.cloudfront.net"  # Update with your CloudFront domain
       
       # MediaConvert Configuration (REQUIRED - Set as SECRET)
       - key: MEDIACONVERT_ENDPOINT
@@ -97,12 +97,12 @@ services:
       # CORS Configuration
       - key: FRONTEND_URL
         scope: RUN_TIME
-        value: "https://fabricatedcrime.com"
+        value: "https://your-domain.com"
       - key: APP_URL
         scope: RUN_TIME
-        value: "https://panastream.fabricatedcrime.com"
+        value: "https://your-app-name.ondigitalocean.app"
 
 # Domain configuration
 domains:
-  - domain: panastream.fabricatedcrime.com
+  - domain: your-app-name.ondigitalocean.app
     type: PRIMARY

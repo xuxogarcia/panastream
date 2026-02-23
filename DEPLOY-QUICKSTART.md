@@ -3,7 +3,7 @@
 ## Overview
 Deploy **PanaStream server only** to DigitalOcean App Platform:
 - **Region**: SFO3 (San Francisco)
-- **Domain**: `panastream.fabricatedcrime.com`
+- **Domain**: `your-app-name.ondigitalocean.app`
 - **Type**: Server-only (no client code)
 
 ## Step-by-Step Deployment
@@ -36,7 +36,7 @@ github:
 3. Click **"Create App"**
 4. Select **"GitHub"** and choose your repository
 5. DigitalOcean will detect `app.yaml` automatically
-6. Review the configuration (region: SFO3, domain: panastream.fabricatedcrime.com)
+6. Review the configuration (region: SFO3, domain: your-app-name.ondigitalocean.app)
 7. Click **"Next"**
 
 **Option B: Manual Configuration**
@@ -48,7 +48,7 @@ github:
    - **Run Command**: `npm start`
    - **Environment**: Node.js
    - **Region**: SFO3
-3. Add domain: `panastream.fabricatedcrime.com`
+3. Add domain: `your-app-name.ondigitalocean.app`
 
 ### 4. Set Environment Variables
 
@@ -67,15 +67,15 @@ In DigitalOcean App Platform dashboard, add these **SECRET** environment variabl
 - `AWS_REGION` = `us-east-1`
 - `S3_UPLOAD_FOLDER` = `uploads`
 - `S3_PROCESSED_FOLDER` = `processed`
-- `CLOUDFRONT_DOMAIN` = `vod.panastream.pixaclara.io`
-- `FRONTEND_URL` = `https://fabricatedcrime.com`
-- `APP_URL` = `https://panastream.fabricatedcrime.com`
+- `CLOUDFRONT_DOMAIN` = `your-cloudfront-domain.cloudfront.net`
+- `FRONTEND_URL` = `https://your-domain.com`
+- `APP_URL` = `https://your-app-name.ondigitalocean.app`
 - `DATABASE_PATH` = `./database.sqlite`
 
 ### 5. Configure Domain DNS
 
 DigitalOcean will provide DNS instructions:
-- Add CNAME record: `panastream.fabricatedcrime.com` → (DO provided URL)
+- Add CNAME record: `your-app-name.ondigitalocean.app` → (DO provided URL)
 - Or use DigitalOcean nameservers if managing DNS there
 
 ### 6. Configure Fabricated Crime
@@ -83,7 +83,7 @@ DigitalOcean will provide DNS instructions:
 In your Fabricated Crime deployment, set:
 
 ```bash
-PANASTREAM_API_URL=https://panastream.fabricatedcrime.com/api
+PANASTREAM_API_URL=https://your-app-name.ondigitalocean.app/api
 PANASTREAM_API_TOKEN=(same token as PanaStream)
 ```
 
@@ -91,21 +91,21 @@ PANASTREAM_API_TOKEN=(same token as PanaStream)
 
 ```bash
 # Health check (no auth required)
-curl https://panastream.fabricatedcrime.com/health
+curl https://your-app-name.ondigitalocean.app/health
 
 # API test (should fail without token)
-curl https://panastream.fabricatedcrime.com/api/media
+curl https://your-app-name.ondigitalocean.app/api/media
 
 # API test (should succeed with token)
 curl -H "Authorization: Bearer your-token" \
-     https://panastream.fabricatedcrime.com/api/media
+     https://your-app-name.ondigitalocean.app/api/media
 ```
 
 ## Important Notes
 
 ✅ **Server Only**: This deploys only the `/server` directory - no client code  
 ✅ **Region**: Configured for SFO3  
-✅ **Domain**: `panastream.fabricatedcrime.com`  
+✅ **Domain**: `your-app-name.ondigitalocean.app`  
 ✅ **Containerized**: DigitalOcean handles containerization automatically  
 ✅ **Auto-deploy**: Configured to deploy on git push to main branch
 
@@ -134,5 +134,5 @@ curl -H "Authorization: Bearer your-token" \
 4. ✅ Deploy Fabricated Crime with API URL and token
 5. ✅ Test integration
 
-Your API will be available at: `https://panastream.fabricatedcrime.com`
+Your API will be available at: `https://your-app-name.ondigitalocean.app`
 

@@ -38,9 +38,9 @@ services:
   - key: S3_BUCKET_NAME
     value: panastream-pixaclara
   - key: CLOUDFRONT_DOMAIN
-    value: vod.panastream.pixaclara.io
+    value: your-cloudfront-domain.cloudfront.net
   - key: MEDIACONVERT_ROLE_ARN
-    value: arn:aws:iam::541759744703:role/los2marias-vod-MediaConvert
+    value: arn:aws:iam::YOUR_ACCOUNT_ID:role/YOUR_MEDIACONVERT_ROLE
   - key: FRONTEND_URL
     value: ${FRONTEND_URL}
   - key: APP_URL

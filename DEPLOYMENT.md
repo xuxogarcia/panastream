@@ -1,7 +1,7 @@
 # PanaStream Deployment Guide - DigitalOcean App Platform
 
 ## Overview
-This guide covers deploying **PanaStream server only** to DigitalOcean App Platform in SFO3 region with the domain `panastream.fabricatedcrime.com`.
+This guide covers deploying **PanaStream server only** to DigitalOcean App Platform in SFO3 region with the domain `your-app-name.ondigitalocean.app`.
 
 **Note**: This is a server-only deployment. The client code is not needed.
 

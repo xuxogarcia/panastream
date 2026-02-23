@@ -551,8 +551,8 @@ router.get('/status/:jobId', (req, res) => {
             if (cloudFrontConfig.domain) {
               cloudfrontUrl = `https://${cloudFrontConfig.domain}/${processedS3Key}`;
             } else {
-              // Fallback: use the pattern from existing media (vod.panastream.pixaclara.io)
-              cloudfrontUrl = `https://vod.panastream.pixaclara.io/${processedS3Key}`;
+              // Fallback: use CLOUDFRONT_DOMAIN from env or placeholder
+              cloudfrontUrl = `https://${process.env.CLOUDFRONT_DOMAIN || 'your-cloudfront-domain.cloudfront.net'}/${processedS3Key}`;
             }
             
             // Update the media record with video info (preserve filmmaker_id if it exists)
@@ -702,8 +702,8 @@ router.post('/poll-status', conversionLimiter, async (req, res) => {
                   if (cloudFrontConfig.domain) {
                     cloudfrontUrl = `https://${cloudFrontConfig.domain}/${processedS3Key}`;
                   } else {
-                    // Fallback: use the pattern from existing media (vod.panastream.pixaclara.io)
-                    cloudfrontUrl = `https://vod.panastream.pixaclara.io/${processedS3Key}`;
+                    // Fallback: use CLOUDFRONT_DOMAIN from env or placeholder
+                    cloudfrontUrl = `https://${process.env.CLOUDFRONT_DOMAIN || 'your-cloudfront-domain.cloudfront.net'}/${processedS3Key}`;
                   }
                   
                   // First update the media record with video info
